@@ -6,7 +6,7 @@ exports.insertUser = (firstName, lastName, email, password) => {
       if (err) {
         reject(err);
       } else {
-        resolve(res);
+        resolve(res.rows);
       }          
     });
   });
