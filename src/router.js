@@ -1,5 +1,8 @@
+const querystring = require('querystring');
 const handleHomePage = require('./handlers/handelHomePage');
 const handleStatic = require('./handlers/handleStatic');
+const handleLogin = require('./handlers/handlerLogin');
+
 const {
   handlePageNotFound,
   handleServerError,
@@ -33,8 +36,12 @@ const router = (request, response) => {
         handleServerError(response);
       }
     });
-  } else if (endPoint === '/login' && request.headers.method === 'POST') {
-    console.log(request.headers);
+  } else if (endPoint === '/login' && request.method === 'POST') {
+    handleLogin(request).then((res) => {
+      console.log(querystring.parse(res));
+    }).catch((error) => {
+      handleServerError(response);
+    });
   } else {
     handlePageNotFound(response);
   }
