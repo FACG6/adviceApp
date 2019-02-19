@@ -1,0 +1,33 @@
+{
+  "name": "adviesapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node ./test/test.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FACG6/adviesApp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FACG6/adviesApp/issues"
+  },
+  "homepage": "https://github.com/FACG6/adviesApp#readme",
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "nodemon": "^1.18.10",
+    "supertest": "^3.4.2",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.10.1"
+  },
+  "dependencies": {
+    "env2": "^2.2.2",
+    "pg": "^7.8.0"
+  }
+}
