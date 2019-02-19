@@ -19,6 +19,3 @@ const request = (url, method, value) => new Promise((resolve, reject) => {
   xhr.open(method, url);
   xhr.send(value);
 });
-if (typeof module !== 'undefined') {
-  module.exports = request;
-}
