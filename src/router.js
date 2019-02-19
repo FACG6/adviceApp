@@ -33,6 +33,10 @@ const router = (request, response) => {
         handleServerError(response);
       }
     });
+  } else if (endPoint === '/login' && request.headers.method === 'POST') {
+    console.log(request.headers);
+  } else {
+    handlePageNotFound(response);
   }
 };
 module.exports = router;
