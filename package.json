@@ -7,9 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "tape ./test/test.js | tap-spec",
-    "start": "node ./src/server.js",
-    "live": "nodemon ./src/server.js"
+    "dev":"NODE_ENV=dev node ./src/server.js",
+    "pro":"NODE_ENV=pro node ./src/server.js",
+    "test": "node ./test/test.js | tap-spec",
+    "live":"nodemon ./src/server.js"
   },
   "repository": {
     "type": "git",
