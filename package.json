@@ -7,7 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node ./test/test.js | tap-spec"
+    "test": "tape ./test/test.js | tap-spec",
+    "start": "node ./src/server.js",
+    "live": "nodemon ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,8 @@
   "homepage": "https://github.com/FACG6/adviesApp#readme",
   "devDependencies": {
     "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "nodemon": "^1.18.10",
     "supertest": "^3.4.2",
     "tap-spec": "^5.0.0",
