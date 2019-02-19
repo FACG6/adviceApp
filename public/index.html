@@ -10,7 +10,7 @@
 </head>
 <body>
    <main class="login">
-       <form class="login--form">
+       <form class="login--form" action="/login" method="POST">
            <label for="email">
                <input type="email" name="email" class="login--form-input" id="email" placeholder="Enter Your Email" required>
            </label>
@@ -22,6 +22,8 @@
                 </label> <span>If don't have account <a href="./pages/sigup.html">Sign Up</a></span>
             
        </form>
-   </main>  
+   </main> 
+   <script src="./public/js/request.js"></script> 
+   <script src="./public/js/logic.js"></script> 
 </body>
 </html>

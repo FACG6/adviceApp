@@ -6,12 +6,10 @@ const request = (url, method, value) => new Promise((resolve, reject) => {
       if (xhr.status === 200) {
         if (response.error) {
           reject(response.error);
-        }
-        else {
+        } else {
           resolve(response.result);
         }
-      }
-      else {
+      } else {
         reject(response.error);
       }
     }
