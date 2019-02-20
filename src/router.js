@@ -80,7 +80,7 @@ const router = (request, response) => {
           } else {
             bcrypt.hash(res.data.password, 5, (err, hash) => {
               if (err) {
-                console.log(err);
+                handleServerError(response);
               } else {
                 addUser(res.data.firstName, res.data.lastName, res.data.email, hash)
                   .then((resAdd) => {
@@ -92,7 +92,7 @@ const router = (request, response) => {
               }
             });
           }
-        }).catch(e => console.log(e));
+        }).catch(() => handleServerError(response));
     }
   } else if (allEndPoint.indexOf(endPoint) !== -1) {
     handleAuth(response);
