@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const {
   sign,
   verify,
@@ -8,7 +9,10 @@ const handleHomePage = require('./handlers/handelHomePage');
 const handleStatic = require('./handlers/handleStatic');
 const handleLogin = require('./handlers/handlerLogin');
 const isUser = require('./queries/isUser');
+const isEmail = require('./queries/isEmail');
 const handleAdvicePage = require('./handlers/handleAdvicePage');
+const { handleSignUpPage, handleSignUp } = require('./handlers/handleSignUP');
+const { addUser } = require('./queries/addUser');
 
 const {
   handlePageNotFound,
@@ -85,7 +89,7 @@ const router = (request, response) => {
       });
   } else if (endPoint === '/getInfo' && request.headers.cookie && request.headers.cookie.includes('jwt')) {
     const {
-      jwt
+      jwt,
     } = cookie.parse(request.headers.cookie);
     verify(jwt, process.env.SECRET, (error, infoJwt) => {
       if (error) {
@@ -99,8 +103,62 @@ const router = (request, response) => {
         }));
       }
     });
+  } else if (endPoint.includes('/signUpPage') && request.method === 'GET') {
+    handleSignUpPage(request, response)
+      .then((res) => {
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        response.end(res);
+      }).catch((err) => {
+        if (err.code === 'ENOENT') {
+          handlePageNotFound(response);
+        } else {
+          handleServerError(response);
+        }
+      });
+  } else if (endPoint === '/signup' && request.method === 'POST') {
+    if (request.headers.cookie && request.headers.cookie.includes('jwt')) {
+      const {
+        jwt,
+      } = cookie.parse(request.headers.cookie);
+      verify(jwt, process.env.SECRET, (error, infoJwt) => {
+        if (error) {
+          response.writeHead(401, {
+            'Content-Type': 'text/html',
+            'Set-Cookie': 'jwt=;HttpOnly;Max-Age=0',
+          });
+          response.end('<h2> Cookie error !!!</h2>');
+        } else {
+          response.writeHead(302, {
+            Location: '/advice',
+          });
+          response.end();
+        }
+      });
+    } else {
+      handleSignUp(request)
+        .then(isEmail).then((res) => {
+          if (res.result) {
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            response.end(JSON.stringify({ result: '<h2>email is used!!!</h2>' }));
+          } else {
+            bcrypt.hash(res.data.password, 5, (err, hash) => {
+              if (err) {
+                console.log(err);
+              } else {
+                addUser(res.data.firstName, res.data.lastName, res.data.email, hash).then((res) => {
+                  if (res) {
+                    response.writeHead(200, { 'Content-Type': 'text/html' });
+                    response.end(JSON.stringify({ result: 'ok' }));
+                  }
+                });
+              }
+            });
+          }
+        }).catch(e => console.log(e));
+    }
   } else {
     handlePageNotFound(response);
   }
 };
+
 module.exports = router;
