@@ -10,4 +10,4 @@ exports.insertUser = (firstName, lastName, email, password) => {
       }          
     });
   });
-}
+};
