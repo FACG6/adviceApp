@@ -15,7 +15,7 @@ CREATE TABLE advice(
 );
 
 INSERT INTO users (first_name,last_name, email, password) VALUES
-('Ayman','alqoqa', 'aal@gmail.com','123456789'),
-('kaka', 'mortaja', 'ka@gmail.clm', '987654321');
+('Ayman','alqoqa', 'aal@gmail.com','$2b$05$JuAePX0DJGli25ym/0qwkeYvdDPkFqLLcLdKdmi2dBeUw17x5Xkce'),
+('kaka', 'mortaja', 'ka@gmail.clm', '$2b$05$cbGbq2oArni6CR0Xisq7vOhefLcBt3Uiot3FPtQVwsB7m8HhdJ/8a');
 
 COMMIT;

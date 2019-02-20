@@ -1,12 +1,12 @@
-const {Pool} = require('pg');
+const { Pool } = require('pg');
 const url = require('url');
 require('env2')('./config.env');
 
 let DB_URL = process.env.DB_LOCAL_URL;
-if(process.env.NODE_ENV==='dev'){
-    DB_URL = process.env.DB_LOCAL_URL;
-}else if (process.env.NODE_ENV==='pro'){
-    DB_URL = process.env.DATABASE_URL;
+if (process.env.NODE_ENV === 'dev') {
+  DB_URL = process.env.DB_LOCAL_URL;
+} else if (process.env.NODE_ENV === 'pro') {
+  DB_URL = process.env.DATABASE_URL;
 }
 
 const params = url.parse(DB_URL);
@@ -23,4 +23,3 @@ const option = {
 };
 
 module.exports = new Pool(option);
-

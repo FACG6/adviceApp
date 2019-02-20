@@ -1,16 +1,18 @@
-const submit = document.querySelector('#submit');
-const email = document.querySelector('#email');
-const password = document.querySelector('#password');
+const submit = document.getElementById('submit');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const loginError = document.querySelector('.login--error');
 submit.addEventListener('click', (e) => {
   e.preventDefault();
   const value = JSON.stringify({
-    emailVal: email.value,
-    passwordVal: password.value,
+    email: emailInput.value,
+    password: passwordInput.value,
   });
-  request('/login', 'POST', value).then((result) => {
-    console.log(result);
-  }).catch((error) => {
-    console.log(error);
-  });
-
+  request('/login', 'POST', value)
+    .then((result) => {
+      window.location.href = '/advice';
+    })
+    .catch((error) => {
+      loginError.textContent = error;
+    });
 });

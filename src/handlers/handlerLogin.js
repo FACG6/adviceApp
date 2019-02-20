@@ -1,3 +1,5 @@
+const querystring = require('querystring');
+
 const handlerLogin = (request) => {
   let allData = '';
   return new Promise((resolve, reject) => {
@@ -5,7 +7,7 @@ const handlerLogin = (request) => {
       allData += chunkData;
     });
     request.on('end', () => {
-      resolve(allData);
+      resolve(JSON.parse(allData));
     }).on('error', (error) => {
       reject(error.message);
     });
