@@ -18,6 +18,25 @@ const {
 const router = (request, response) => {
   const endPoint = request.url;
   if (endPoint === '/') {
+    if (request.headers.cookie && request.headers.cookie.includes('jwt')) {
+      const {
+        jwt,
+      } = cookie.parse(request.headers.cookie);
+      verify(jwt, process.env.SECRET, (error, infoJwt) => {
+        if (error) {
+          response.writeHead(401, {
+            'Content-Type': 'text/html',
+            'Set-Cookie': 'jwt=;HttpOnly;Max-Age=0',
+          });
+          response.end('<h2> Cookie error !!!</h2>');
+        } else {
+          response.writeHead(302, {
+            Location: '/advice',
+          });
+          response.end();
+        }
+      });
+    }
     handleHomePage()
       .then((res) => {
         response.writeHead(200, {
@@ -73,26 +92,44 @@ const router = (request, response) => {
         handleServerError(response);
       });
   } else if (endPoint === '/advice' && request.headers.cookie && request.headers.cookie.includes('jwt')) {
-    handleAdvicePage(response)
-      .then((file) => {
-        response.writeHead(200, {
-          'Content-Type': 'text/html',
-        });
-        response.end(file);
-      })
-      .catch((error) => {
-        handleServerError(response);
-      });
-  } else if (endPoint === '/getInfo' && request.headers.cookie && request.headers.cookie.includes('jwt')) {
     const {
-      jwt
+      jwt,
     } = cookie.parse(request.headers.cookie);
     verify(jwt, process.env.SECRET, (error, infoJwt) => {
       if (error) {
-        response.writeHead(401, 'text/html');
-        response.end('<h2>token error !!!</h2>');
+        response.writeHead(401, {
+          'Content-Type': 'text/html',
+          'Set-Cookie': 'jwt=;HttpOnly;Max-Age=0',
+        });
+        response.end('<h2>Cookie error !!!</h2>');
       } else {
-        response.writeHead(200, 'application/json');
+        handleAdvicePage(response)
+          .then((file) => {
+            response.writeHead(200, {
+              'Content-Type': 'text/html',
+            });
+            response.end(file);
+          })
+          .catch((error) => {
+            handleServerError(response);
+          });
+      }
+    });
+  } else if (endPoint === '/getInfo' && request.headers.cookie && request.headers.cookie.includes('jwt')) {
+    const {
+      jwt,
+    } = cookie.parse(request.headers.cookie);
+    verify(jwt, process.env.SECRET, (error, infoJwt) => {
+      if (error) {
+        response.writeHead(401, {
+          'Content-Type': 'text/html',
+          'Set-Cookie': 'jwt=;HttpOnly;Max-Age=0',
+        });
+        response.end('<h2>Cookie error !!!</h2>');
+      } else {
+        response.writeHead(200, {
+          'Content-Type': 'application/json',
+        });
         response.end(JSON.stringify({
           error: null,
           result: infoJwt,
