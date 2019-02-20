@@ -1,0 +1,22 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+.nav{
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    font-size: 40px;
+    margin-bottom: 50px;
+}
+.login{
+    width: 50%;
+    margin: auto;
+}
+.login--form-input{
+    margin-bottom: 20px;
+    height: 30px;
+}
