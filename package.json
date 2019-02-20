@@ -8,9 +8,9 @@
   },
   "scripts": {
     "dev": "NODE_ENV=dev node ./src/server.js",
-    "pro": "NODE_ENV=pro node ./src/server.js",
-    "test": "node ./test/test.js | tap-spec",
-    "live": "nodemon ./src/server.js"
+    "test": "NODE_ENV=dev node ./test/test.js | tap-spec",
+    "live": "nodemon ./src/server.js",
+    "start": "NODE_ENV=pro node ./src/server.js"
   },
   "repository": {
     "type": "git",
