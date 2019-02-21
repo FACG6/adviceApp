@@ -3,6 +3,10 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const loginError = document.querySelector('.login--error');
 submit.addEventListener('click', (e) => {
+  if (!(emailInput.value) || !(passwordInput.value)) {
+    loginError.textContent = 'Please Fill All Field';
+    return '';
+  }
   e.preventDefault();
   const value = JSON.stringify({
     email: emailInput.value,
