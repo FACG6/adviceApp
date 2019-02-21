@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-const cookie = require('cookie');
 const handleHomePage = require('./handlers/handelHomePage');
 const handleStatic = require('./handlers/handleStatic');
 const handleLogin = require('./handlers/handlerLogin');
@@ -10,10 +8,8 @@ const handleDisplayAdvices = require('./handlers/handleDisplayAdvice');
 const handleGetInfo = require('./handlers/handleGetInfo');
 const handleLogout = require('./handlers/handleLogout');
 const handleAuth = require('./handlers/handleAuth');
-const { handleSignUpPage, handleSignUp } = require('./handlers/handleSignUP');
-const isEmail = require('./queries/isEmail');
-const { addUser } = require('./queries/addUser');
-
+const handleSignupPage = require('./handlers/handleSignupPage');
+const handlerSignup = require('./handlers/handlerSignup');
 const {
   handlePageNotFound,
   handleServerError,
@@ -41,59 +37,9 @@ const router = (request, response) => {
   } else if (endPoint === '/deleteAdivce' && request.method === 'POST' && request.headers.cookie && request.headers.cookie.includes('jwt')) {
     handleDeleteAdvice(request, response);
   } else if (endPoint.includes('/signUpPage') && request.method === 'GET') {
-    handleSignUpPage(request, response)
-      .then((res) => {
-        response.writeHead(200, { 'Content-Type': 'text/html' });
-        response.end(res);
-      }).catch((err) => {
-        if (err.code === 'ENOENT') {
-          handlePageNotFound(response);
-        } else {
-          handleServerError(response);
-        }
-      });
+    handleSignupPage(request, response);
   } else if (endPoint === '/signup' && request.method === 'POST') {
-    if (request.headers.cookie && request.headers.cookie.includes('jwt')) {
-      const {
-        jwt,
-      } = cookie.parse(request.headers.cookie);
-      verify(jwt, process.env.SECRET, (error, infoJwt) => {
-        if (error) {
-          response.writeHead(401, {
-            'Content-Type': 'text/html',
-            'Set-Cookie': 'jwt=;HttpOnly;Max-Age=0',
-          });
-          response.end('<h2> Cookie error !!!</h2>');
-        } else {
-          response.writeHead(302, {
-            Location: '/advice',
-          });
-          response.end();
-        }
-      });
-    } else {
-      handleSignUp(request)
-        .then(isEmail).then((res) => {
-          if (res.result) {
-            response.writeHead(200, { 'Content-Type': 'text/html' });
-            response.end(JSON.stringify({ result: '<h2>email is used!!!</h2>' }));
-          } else {
-            bcrypt.hash(res.data.password, 5, (err, hash) => {
-              if (err) {
-                handleServerError(response);
-              } else {
-                addUser(res.data.firstName, res.data.lastName, res.data.email, hash)
-                  .then((resAdd) => {
-                    if (resAdd) {
-                      response.writeHead(200, { 'Content-Type': 'text/html' });
-                      response.end(JSON.stringify({ result: 'ok' }));
-                    }
-                  });
-              }
-            });
-          }
-        }).catch(() => handleServerError(response));
-    }
+    handlerSignup(request, response);
   } else if (allEndPoint.indexOf(endPoint) !== -1) {
     handleAuth(response);
   } else {

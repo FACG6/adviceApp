@@ -13,7 +13,7 @@ const createElements = (tag, name, valueElement, parent, className) => {
   parent.appendChild(newElement);
   return newElement;
 };
-const deleteAdvices = (adviceElement)=>{
+const deleteAdvices = (adviceElement) => {
   adviceElement.addEventListener('click', () => {
     request('/deleteAdivce', 'POST', adviceElement.value)
       .then((res) => {
@@ -25,7 +25,7 @@ const deleteAdvices = (adviceElement)=>{
         createElements('p', error, null, info, 'error');
       });
   });
-}
+};
 const render = (res) => {
   createElements('p', res.name, null, info, 'info--name');
 };
@@ -54,7 +54,13 @@ request('/displyAdvices', 'GET', null)
   });
 submit.addEventListener('click', (e) => {
   e.preventDefault();
-  request('/addAvice', 'POST', text.value).then((res) => {
+  if (!(text.value.trim())) {
+    message.innerHTML = '';
+    createElements('p', 'Add Your Advice', null, message, 'error');
+    return '';
+  }
+  request('/addAvice', 'POST', text.value.trim()).then((res) => {
+    message.innerHTML = '';
     const containerAdvice = createElements('div', '', null, result, 'result--advice');
     createElements('p', res[0].content, null, containerAdvice, 'result--advice-text');
     const deleteAdvice = createElements('button', 'Delete', res[0].id, containerAdvice, 'result--advice-delete');
